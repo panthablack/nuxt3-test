@@ -15,5 +15,5 @@
 </template>
 
 <script setup lang="js">
-const course = useCourse()
+const { state: course } = useCourse()
 </script>

@@ -15,12 +15,18 @@
             class="flex flex-row space-x-1 no-underline prose-sm font-normal py-1 px-4 -mx-4"
           >
             <NuxtLink
-              :to="`/course/chapter/${chapter.slug}/lesson/${lesson.slug}`"
+              :to="lesson.path"
               class="no-underline"
+              :class="{
+                'text-blue-500':
+                  lesson.path === $route.fullPath,
+                'text-gray-600 hover:text-gray-800':
+                  lesson.path !== $route.fullPath,
+              }"
             >
               <div class="link flex flex-row">
-                <span class="mr-3 text-gray-500">{{ lesson.number }}.</span>
-                <span class="hover:text-indigo-800">{{ lesson.title }}</span>
+                <span class="mr-3">{{ lesson.number }}.</span>
+                <span class="">{{ lesson.title }}</span>
               </div>
             </NuxtLink>
           </li>
@@ -31,6 +37,6 @@
 </template>
 
 <script setup lang="js">
-const course = useCourse()
+const { state: course } = useCourse()
 const chapters = course.chapters
 </script>

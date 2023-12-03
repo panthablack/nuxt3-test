@@ -5,20 +5,20 @@
     </p>
     <h2 class="my-0">{{ lesson.title }}</h2>
     <div class="flex space-x-4 mt-2 mb-8">
-      <a
+      <NuxtLink
         v-if="lesson.sourceUrl"
         class="font-normal text-md text-gray-500"
         :href="lesson.sourceUrl"
       >
         Download Source Code
-      </a>
-      <a
+      </NuxtLink>
+      <NuxtLink
         v-if="lesson.downloadUrl"
         class="font-normal text-md text-gray-500"
         :href="lesson.downloadUrl"
       >
         Download Video
-      </a>
+      </NuxtLink>
     </div>
     <div
       v-if="lesson.videoId"
@@ -27,24 +27,30 @@
       <VideoPlayer :videoId="lesson.videoId" />
     </div>
     <p>{{ lesson.text }}</p>
+    <LessonCompleteButton
+      :model-value="isLessonComplete"
+      @update:model-value="updateIsLessonComplete"
+    />
   </div>
 </template>
 
 <script setup lang="js">
-const course = useCourse()
+const { state: course } = useCourse()
 const route = useRoute()
 
 const chapter = computed(
   () => course.chapters.find(chapter => chapter.slug === route.params.chapter)
 )
-console.log(chapter)
 
 const lesson = computed(
   () => chapter.value?.lessons?.find(lesson => lesson.slug === route.params.lesson)
 )
-console.log(lesson)
 
+// update title
+const title = computed(() => lesson.value.title)
+useHead({ title })
 
+const { isLessonComplete, updateIsLessonComplete } = useProgress(chapter, lesson)
 </script>
 
 <style scoped>

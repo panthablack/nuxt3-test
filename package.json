@@ -12,6 +12,8 @@
     "nuxt": "3.0.0"
   },
   "dependencies": {
+    "@vueuse/core": "^10.6.1",
+    "@vueuse/nuxt": "^10.6.1",
     "prettier": "^3.1.0"
   }
 }
