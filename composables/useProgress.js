@@ -13,6 +13,8 @@ export const useProgress = (chapter, lesson, key = 'progress') => {
   const updateIsLessonComplete = e => {
     // if chapter does not exist, create it
     if (!progress.value[chapter.value.number]) progress.value[chapter.value.number] = {}
+    // if third lesson, simulate error
+    if (lesson.value.number == 3) throw createError("Yo, this ain't allowed, yo!")
     // mark lesson as innverse of current value
     progress.value[chapter.value.number][lesson.value.number] = e
   }

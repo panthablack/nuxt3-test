@@ -27,10 +27,25 @@
       <VideoPlayer :videoId="lesson.videoId" />
     </div>
     <p>{{ lesson.text }}</p>
-    <LessonCompleteButton
-      :model-value="isLessonComplete"
-      @update:model-value="updateIsLessonComplete"
-    />
+    <NuxtErrorBoundary>
+      <LessonCompleteButton
+        :model-value="isLessonComplete"
+        @update:model-value="updateIsLessonComplete"
+      />
+      <template #error="{ error }">
+        <p>
+          Oh, no! Something broke... :(
+          <br>
+          <code>{{ error }}</code>
+          <br>
+          <br>
+          <button
+            class="rounded text-white font-bold py-2 px-4 cursor-pointer bg-red-400"
+            @click="resetError(error)"
+          >Reset</button>
+        </p>
+      </template>
+    </NuxtErrorBoundary>
   </div>
 </template>
 
@@ -46,11 +61,16 @@ const lesson = computed(
   () => chapter.value?.lessons?.find(lesson => lesson.slug === route.params.lesson)
 )
 
+// if either chapter or lesson missing, throw 404 error
+if (!(chapter.value && lesson.value)) throw createError({ statusCode: 404 })
+
 // update title
 const title = computed(() => lesson.value.title)
 useHead({ title })
 
 const { isLessonComplete, updateIsLessonComplete } = useProgress(chapter, lesson)
+
+const resetError = (error) => error.value = null
 </script>
 
 <style scoped>
